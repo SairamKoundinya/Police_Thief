@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/redblue"
+    android:layout_height="match_parent"
+    tools:context=".JoinGame">
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textColor="@color/white"
+        android:hint="@string/enter_code_here"
+        android:textColorHint="@color/white"
+        android:id="@+id/code"
+        android:inputType="number" />
+    <Button
+        android:id="@+id/check_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/custombutton"
+        android:textStyle="bold"
+        android:text="@string/check_code"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:paddingStart="20dp"
+        android:paddingEnd="10dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_margin="5dp"
+        android:textStyle="italic"
+        android:text="@string/players_joined" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/list_players"
+        android:background="@drawable/glassview"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

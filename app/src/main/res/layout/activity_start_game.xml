@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/redblue"
+    android:orientation="vertical"
+    tools:context=".StartGame">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:id="@+id/code"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textSize="40sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/copy_code"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custombutton2"
+            android:text="@string/copy"
+            android:textColor="@color/white"
+            android:drawableEnd="@drawable/copy"
+            android:layout_margin="5dp"
+            />
+
+        <Button
+            android:id="@+id/share_code"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:text="@string/share"
+            android:textColor="@color/white"
+            android:background="@drawable/custombutton2"
+            android:drawableEnd="@drawable/share"
+            android:layout_margin="5dp"
+            />
+    </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:layout_weight="0.7"
+                android:textSize="14sp"
+                android:layout_height="wrap_content"
+                android:text="@string/fix_rounds" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
+                android:textStyle="bold"
+                android:layout_height="35dp"
+                android:layout_margin="2dp"
+                android:text="@string/minus"
+                android:textSize="20sp"
+                android:background="@drawable/rounded_button"
+                android:textColor="@color/red"
+                android:id="@+id/decrementbtn" />
+
+            <TextView
+                android:id="@+id/roundsvalue"
+                android:layout_width="0dp"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_weight="0.1"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:background="@drawable/rounded_button"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/red"
+                android:layout_width="0dp"
+                android:layout_margin="2dp"
+                android:layout_weight="0.1"
+                android:layout_height="35dp"
+                android:text="@string/plus"
+                android:id="@+id/incrementbtn" />
+        </LinearLayout>
+
+    <Button
+        android:id="@+id/play_game"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/custombutton"
+        android:text="@string/play_game"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_margin="5dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:paddingStart="20dp"
+        android:paddingEnd="10dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:textColor="@color/white"
+        android:textStyle="italic"
+        android:text="@string/players_joined" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/list_players"
+        android:background="@drawable/glassview"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

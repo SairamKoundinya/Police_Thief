@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "108263488175",
+    "firebase_url": "https://police-thief.firebaseio.com",
+    "project_id": "police-thief",
+    "storage_bucket": "police-thief.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:108263488175:android:5d7321a55a3f89797e325a",
+        "android_client_info": {
+          "package_name": "com.friendsapp.policethiefgame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "108263488175-jf64n6ekjcsl0mno1pa2b3u6ojur8t5f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmC9cXDjtc_yYx5HKHnd3q1nAK2_Lm9p0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "108263488175-jf64n6ekjcsl0mno1pa2b3u6ojur8t5f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:108263488175:android:8c74264e524e630b7e325a",
+        "android_client_info": {
+          "package_name": "com.loo.bhuvan_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "108263488175-jf64n6ekjcsl0mno1pa2b3u6ojur8t5f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmC9cXDjtc_yYx5HKHnd3q1nAK2_Lm9p0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "108263488175-jf64n6ekjcsl0mno1pa2b3u6ojur8t5f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
