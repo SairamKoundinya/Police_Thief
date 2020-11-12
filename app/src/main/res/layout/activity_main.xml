@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@drawable/redblue"
+    android:id="@+id/coordinator"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
@@ -32,8 +33,48 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_marginBottom="55dp"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_margin="5dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/glassview"
+        android:layout_height="50dp">
+        <EditText
+            android:id="@+id/message"
+            android:layout_width="0dp"
+            android:layout_weight="0.7"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:hint="@string/enter_your_message"
+            android:inputType="text" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_weight="0.15"
+            android:src="@drawable/send"
+            android:id="@+id/send"
+            android:background="@drawable/custombutton"
+            android:layout_margin="5dp"
+            android:contentDescription="@string/qmsg"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_weight="0.15"
+            android:src="@drawable/qmsg"
+            android:background="@drawable/custombutton"
+            android:contentDescription="@string/send"
+            android:layout_margin="5dp"
+            android:id="@+id/qmsg"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

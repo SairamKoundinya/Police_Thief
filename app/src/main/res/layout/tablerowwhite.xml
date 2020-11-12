@@ -13,7 +13,7 @@
         android:gravity="center"
         android:singleLine="true"
         android:ellipsize="marquee"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/white"
         android:scrollHorizontally="true"
         android:marqueeRepeatLimit="marquee_forever"
         />
@@ -21,7 +21,7 @@
         android:textStyle="bold"
         android:gravity="center"
         android:layout_width="0dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/white"
         android:layout_weight="0.3"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"

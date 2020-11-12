@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.friendsapp.policethiefgame.R;
 
@@ -44,14 +45,18 @@ public class Points  extends Fragment {
 
         players = new String[playersCount];
         scores = new int[playersCount];
+        showPoints();
 
         return root;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        showPoints();
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if(menuVisible){
+            //Toast.makeText(getActivity(), "Points", Toast.LENGTH_LONG).show();
+            showPoints();
+        }
     }
 
     private void showPoints() {

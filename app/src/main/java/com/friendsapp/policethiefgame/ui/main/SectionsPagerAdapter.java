@@ -20,7 +20,7 @@ import com.friendsapp.policethiefgame.fragment.Points;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.play, R.string.points, R.string.chat};
+    private static final int[] TAB_TITLES = new int[]{R.string.play,R.string.score, R.string.chat};
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {

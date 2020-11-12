@@ -3,6 +3,7 @@ package com.friendsapp.policethiefgame.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -49,6 +50,8 @@ public class Play extends Fragment {
     TextView status1;
     @BindView(R.id.status2)
     TextView status2;
+    @BindView(R.id.roundinfo)
+    TextView roundinfo;
     @BindView(R.id.distributebutton)
     Button button;
     @BindView(R.id.listview)
@@ -75,6 +78,10 @@ public class Play extends Fragment {
     ImageView thiefimg;
     @BindView(R.id.lvtext)
     LinearLayout lvtext;
+    @BindView(R.id.rvlayout)
+    LinearLayout rvlayout;
+    @BindView(R.id.hidelayout)
+    LinearLayout hidelayout;
 
     private DatabaseReference myRef;
     private SharedPreferences sharedPreferences;
@@ -85,6 +92,7 @@ public class Play extends Fragment {
     private List<Result> myDataset2;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private MediaPlayer mediaPlayer;
 
     private String currentPlayer, playerName, temp;
     private Map<String, String> chits;
@@ -116,8 +124,8 @@ public class Play extends Fragment {
 
         sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("com.friendsapp.policethief.sp", Context.MODE_PRIVATE);
         myRef = FirebaseDatabase.getInstance().getReference().child("games");
-/*
-        setPlayerName();
+
+       /* setPlayerName();
         setPlayersCount();
         setCode();
         setRounds();
@@ -126,11 +134,37 @@ public class Play extends Fragment {
         listentoChits();
         presentlistview();
         listenToSelection();
-        expansionpanel();
+
         setupImageids();
         recyclerViewsetup();
-*/
+        displayRoundinfo();*/
+
+        expansionpanel();
         return root;
+    }
+
+    private void displayRoundinfo() {
+
+        String roundinf = "Round "+roundCount+"/"+rounds;
+        roundinfo.setText(roundinf);
+    }
+
+    private void makeSound(int id)
+    {
+        mprelease();
+
+        mediaPlayer = MediaPlayer.create(getActivity(), id);
+        mediaPlayer.start();
+    }
+
+    private void mprelease()
+    {
+        if(mediaPlayer!=null) {
+            mediaPlayer.release();
+
+            dtimer.setTextColor(getResources().getColor(R.color.white));
+            ftimer.setTextColor(getResources().getColor(R.color.white));
+        }
     }
 
     private void recyclerViewsetup() {
@@ -153,18 +187,18 @@ public class Play extends Fragment {
 
     private void expansionpanel() {
 
-        expansion.setOnClickListener(new View.OnClickListener() {
+        hidelayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 content.toggle();
                 if(expan) {
                     expansion.setImageDrawable(getActivity().getDrawable(R.drawable.expandown));
-                    hide.setText(R.string.show);
+                    hide.setText(R.string.hide);
                     expan = false;
                 }
                 else {
                     expansion.setImageDrawable(getActivity().getDrawable(R.drawable.expanup));
-                    hide.setText(R.string.hide);
+                    hide.setText(R.string.show);
                     expan = true;
                 }
 
@@ -179,7 +213,15 @@ public class Play extends Fragment {
         disTimer =  new CountDownTimer(30*millis, millis) {
             @Override
             public void onTick(long millisUntilFinished) {
-                String countdown = millisUntilFinished/millis+"s";
+                long time = millisUntilFinished/millis;
+
+                if(time == 5)
+                {
+                    makeSound(R.raw.tick);
+                    dtimer.setTextColor(getResources().getColor(R.color.red));
+                }
+
+                String countdown = time+"s";
                 dtimer.setText(countdown);
             }
 
@@ -193,12 +235,21 @@ public class Play extends Fragment {
                     setupChits();
                 }
             }
+
         };
 
         findTimer =  new CountDownTimer(+90*millis, millis) {
             @Override
             public void onTick(long millisUntilFinished) {
-                String countdown = millisUntilFinished/millis+"s";
+                long time = millisUntilFinished/millis;
+
+                if(time == 5)
+                {
+                    makeSound(R.raw.tick);
+                    ftimer.setTextColor(getResources().getColor(R.color.red));
+                }
+
+                String countdown = time+"s";
                 ftimer.setText(countdown);
             }
 
@@ -238,6 +289,8 @@ public class Play extends Fragment {
                 toast("Round "+roundCount+" completed");
                 roundCount++;
                 track = 1;
+                displayRoundinfo();
+                makeSound(R.raw.round);
             }
             else{
                 startActivity(new Intent(getContext(), Winner.class));
@@ -297,6 +350,7 @@ public class Play extends Fragment {
                 }
                 if(has)
                 {
+                    makeSound(R.raw.startgame);
                     if(policename.equals(playerName))
                     {
                         status2.setText("Guess who is thief");
@@ -319,9 +373,9 @@ public class Play extends Fragment {
                         thiefimg.setImageDrawable(getActivity().getResources().getDrawable(imageids[cid]));
                     }
                     status1.setText(currentPlayer+" distributed");
-                    playerslist.setVisibility(View.VISIBLE);
+                   // playerslist.setVisibility(View.VISIBLE);
                     lvtext.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
+                    rvlayout.setVisibility(View.GONE);
                     disTimer.cancel();
                     findTimer.start();
                 }
@@ -368,6 +422,7 @@ public class Play extends Fragment {
                     String select = Objects.requireNonNull(snapshot.getValue()).toString();
                     if(!select.equals(""))
                     {
+                        makeSound(R.raw.switchm);
                         if(thiefname.equals(select))
                         {
                             myDataset2.add(new Result(policename, "+"+1000, imageids[8]));
@@ -386,9 +441,9 @@ public class Play extends Fragment {
                         thieftv.setText("");
                         thiefimg.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.thief));
                         findTimer.cancel();
-                        playerslist.setVisibility(View.GONE);
+                        //playerslist.setVisibility(View.GONE);
                         lvtext.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
+                        rvlayout.setVisibility(View.VISIBLE);
                         mAdapter = new MyAdapter(myDataset2);
                         recyclerView.setAdapter(mAdapter);
                         updateScores();

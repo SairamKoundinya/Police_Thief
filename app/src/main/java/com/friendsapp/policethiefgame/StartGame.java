@@ -86,7 +86,6 @@ public class StartGame extends AppCompatActivity {
     private void sounds(){
         mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic2);
         mediaPlayer.setLooping(true);
-
     }
 
     protected void onResume() {

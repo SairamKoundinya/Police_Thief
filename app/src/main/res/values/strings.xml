@@ -37,4 +37,17 @@
     <string name="expansionpanel">expansionpanel</string>
     <string name="hide">hide</string>
     <string name="leaders_board">leaders board</string>
+    <string name="result">Result</string>
+    <string name="score">Score</string>
+    <string name="enter_your_message">Type message here..</string>
+    <string name="send">send</string>
+    <string name="qmsg">qmsg</string>
+    <string name="hi">Hi</string>
+    <string name="hello">Hello</string>
+    <string name="play_fast">Play Fast</string>
+    <string name="okay">Okay</string>
+    <string name="i_m_police">I\'m the police</string>
+    <string name="i_m_thief">I\'m the thief</string>
+    <string name="who_is_thief">Who is thief</string>
+    <string name="guess_fast">Guess Fast</string>
 </resources>

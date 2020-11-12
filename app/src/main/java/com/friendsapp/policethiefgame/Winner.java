@@ -8,6 +8,7 @@ import butterknife.OnClick;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TableLayout;
@@ -30,6 +31,7 @@ public class Winner extends AppCompatActivity {
     private int playersCount;
 
     private SharedPreferences sharedPref;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +41,21 @@ public class Winner extends AppCompatActivity {
         ButterKnife.bind(this);
 
         sharedPref = getSharedPreferences("com.friendsapp.policethief.sp", Context.MODE_PRIVATE);
+        mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic1);
+        mediaPlayer.start();
 
-        playersCount = getCountOfPlayers();
+        playersCount =   getCountOfPlayers();
 
         players = new String[playersCount];
         scores = new int[playersCount];
 
         showPoints();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.release();
     }
 
     private void showPoints() {
@@ -70,6 +80,7 @@ public class Winner extends AppCompatActivity {
     public void continueGame()
     {
         startActivity(new Intent(this, FirstActivity.class));
+        finish();
     }
 
     private void setUpTableData() {

@@ -9,7 +9,6 @@
                 android:startColor="@color/colorPrimaryDark">
 
             </gradient>
-            <corners android:radius="10dp" />
         </shape>
     </item>
 </selector>
