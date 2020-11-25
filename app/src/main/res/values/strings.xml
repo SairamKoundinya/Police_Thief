@@ -50,4 +50,9 @@
     <string name="i_m_thief">I\'m the thief</string>
     <string name="who_is_thief">Who is thief</string>
     <string name="guess_fast">Guess Fast</string>
+    <string name="rguess">Right guess</string>
+    <string name="wguess">Wrong guess</string>
+    <string name="soundon">soundon</string>
+    <string name="leader">Leader</string>
+    <string name="your_points">Your Points</string>
 </resources>

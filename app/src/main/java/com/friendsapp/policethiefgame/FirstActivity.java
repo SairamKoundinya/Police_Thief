@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Objects;
@@ -23,8 +24,10 @@ public class FirstActivity extends AppCompatActivity {
 
     @BindView(R.id.playerName)
     TextView playerName;
+    @BindView(R.id.sound)
+    ImageView soundImg;
 
-    private String playerNameStr;
+    private String playerNameStr, sound;
 
     private SharedPreferences sharedPreferences;
     private MediaPlayer mediaPlayer;
@@ -43,9 +46,33 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void sounds(){
-        mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic1);
-        mediaPlayer.setLooping(true);
 
+        sound = sharedPreferences.getString("sound", "on");
+        if(sound.equals("on")) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic1);
+            mediaPlayer.setLooping(true);
+            mediaPlayer.start();
+            soundImg.setImageDrawable(getResources().getDrawable(R.drawable.soundon));
+        }
+        else{
+            soundImg.setImageDrawable(getResources().getDrawable(R.drawable.soundoff));
+            mprelease();
+        }
+    }
+
+    @OnClick(R.id.sound)
+    public void soundTrigger()
+    {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if(sound.equals("on"))
+        {
+            editor.putString("sound", "off");
+        }
+        else{
+            editor.putString("sound", "on");
+        }
+        editor.apply();
+        sounds();
     }
 
     @Override
@@ -102,6 +129,12 @@ public class FirstActivity extends AppCompatActivity {
             addName();
         else
             startActivity(new Intent(this, JoinGame.class));
+    }
+
+    @OnClick(R.id.leaderboard)
+    public void lboard()
+    {
+        startActivity(new Intent(this, LeaderBoard.class));
     }
 
     @OnClick(R.id.playerName)

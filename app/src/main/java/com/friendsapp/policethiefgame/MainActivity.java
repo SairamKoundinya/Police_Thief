@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.textclassifier.ConversationActions;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.friendsapp.policethiefgame.ui.main.SectionsPagerAdapter;
 import com.google.firebase.database.ChildEventListener;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private String message, playerName, code;
     private int count;
     private final static int chatpos = 2;
+    public static boolean updatetimer;
     TabLayout tabs;
 
     @BindView(R.id.coordinator)
@@ -66,14 +68,15 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-
-        myRef = FirebaseDatabase.getInstance().getReference().child("chat");
         sharedPref = getSharedPreferences("com.friendsapp.policethief.sp", Context.MODE_PRIVATE);
-        count =1;
+        setCode();
+        myRef = FirebaseDatabase.getInstance().getReference().child("games").child(code).child("chat");
 
         setPlayerName();
-        setCode();
         listentochat();
+
+        count =1;
+        updatetimer = true;
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -91,6 +94,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        //super.onBackPressed();
+        Toast.makeText(this, "Are you sure", Toast.LENGTH_LONG).show();
     }
 
     private void makeSound(int id)
@@ -113,6 +123,10 @@ public class MainActivity extends AppCompatActivity {
         {
             tabs.getTabAt(chatpos).setText(getString(R.string.chat));
         }
+        if(pos == 0)
+            updatetimer = true;
+        else
+            updatetimer = false;
     }
 
 

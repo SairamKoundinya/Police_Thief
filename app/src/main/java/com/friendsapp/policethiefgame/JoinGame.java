@@ -1,6 +1,7 @@
 package com.friendsapp.policethiefgame;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,7 +45,7 @@ public class JoinGame extends AppCompatActivity {
     RecyclerView recyclerView;
 
     private DatabaseReference myRef;
-    private String code, playerName;
+    private String code, playerName, sound;
     private int playersCount;
     private boolean has;
 
@@ -62,6 +63,7 @@ public class JoinGame extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         sharedPreferences = getSharedPreferences("com.friendsapp.policethief.sp", Context.MODE_PRIVATE);
+        sound = sharedPreferences.getString("sound", "on");
 
         sounds();
 
@@ -71,9 +73,12 @@ public class JoinGame extends AppCompatActivity {
         setPlayerName();
     }
 
+
     private void sounds(){
-        mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic2);
-        mediaPlayer.setLooping(true);
+        if(sound.equals("on")) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic2);
+            mediaPlayer.setLooping(true);
+        }
     }
 
     protected void onResume() {

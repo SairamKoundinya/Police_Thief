@@ -108,12 +108,7 @@ public class Points  extends Fragment {
     }
 
     private View getTableRow(int i) {
-        TableRow tableRow ;
-
-        if(i%2==0)
-            tableRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerowwhite, null);
-        else
-            tableRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerowblue, null);
+        TableRow tableRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerowwhite, null);
 
         TextView tv = (TextView) tableRow.getChildAt(0);
         tv.setText(players[i]);

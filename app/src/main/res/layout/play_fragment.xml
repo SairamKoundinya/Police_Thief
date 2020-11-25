@@ -14,14 +14,35 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-        <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:scrollHorizontally="true"
+                android:background="@drawable/border"
+                android:singleLine="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:ellipsize="marquee"
+                android:gravity="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:id="@+id/roundinfo"
+                android:layout_weight="0.9"
+                android:layout_height="0dp"/>
+
+            <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:gravity="end"
-            android:textColor="@color/white"
-            android:id="@+id/roundinfo"
-            android:layout_height="wrap_content"/>
+            android:layout_weight="0.1"
+            android:layout_height="0dp"
+            />
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,16 +78,10 @@
 
         </LinearLayout>
 
-         <ImageView
-             android:layout_width="match_parent"
-             android:src="@drawable/chits"
-             android:layout_height="75dp"
-             android:contentDescription="@string/chits" />
-
         <Button
             android:layout_width="match_parent"
             android:layout_margin="5dp"
-            android:background="@drawable/custombutton"
+            android:background="@drawable/chitsbtnbg"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:text="@string/distribute_chits"
@@ -94,14 +109,14 @@
             android:gravity="end"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:text="@string/show" />
+            android:text="@string/hide" />
 
         <ImageView
             android:layout_width="0dp"
             android:layout_weight="0.1"
             android:id="@+id/expansion"
             android:layout_margin="5dp"
-            android:src="@drawable/expanup"
+            android:src="@drawable/expandown"
             android:contentDescription="@string/expansionpanel"
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -111,7 +126,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/content"
-        app:ael_expanded="false"
+        app:ael_expanded="true"
         app:ael_orientation="vertical">
 
     <LinearLayout
@@ -137,6 +152,10 @@
                 android:layout_width="match_parent"
                 android:layout_margin="2dp"
                 android:textColor="@color/white"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:ellipsize="marquee"
                 android:gravity="center"
                 android:layout_height="20dp"/>
 
@@ -158,6 +177,10 @@
             android:id="@+id/thief"
             android:layout_width="match_parent"
             android:layout_margin="2dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:ellipsize="marquee"
             android:gravity="center"
             android:textColor="@color/white"
             android:layout_height="20dp"/>
@@ -176,8 +199,8 @@
         <TextView
             android:layout_width="match_parent"
             android:textColor="@color/white"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
+            android:padding="5dp"
+            android:id="@+id/result"
             android:text="@string/result"
             android:layout_height="wrap_content"/>
 
@@ -208,6 +231,10 @@
             android:layout_weight="0.85"
             android:layout_margin="5dp"
             android:gravity="center"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:ellipsize="marquee"
             android:textColor="@color/white"
             android:id="@+id/status2"
             android:layout_height="wrap_content"/>

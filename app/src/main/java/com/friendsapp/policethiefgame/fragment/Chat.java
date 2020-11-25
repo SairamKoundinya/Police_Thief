@@ -40,7 +40,6 @@ public class Chat extends Fragment {
     private String playerName, code;
     private List<Message> messages;
     private MsgAdapter msgAdapter;
-//    private ArrayAdapter<String> arrayAdapter;
 
     @Override
     public View onCreateView(
@@ -52,13 +51,12 @@ public class Chat extends Fragment {
 
         messages = new ArrayList<>();
         sharedPref = Objects.requireNonNull(getActivity()).getSharedPreferences("com.friendsapp.policethief.sp", Context.MODE_PRIVATE);
-        myRef = FirebaseDatabase.getInstance().getReference().child("chat");
 
         setPlayerName();
         setCode();
 
         msgAdapter =  new MsgAdapter(getActivity(), messages, playerName);
-        //arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.playeritem, messages);
+        myRef = FirebaseDatabase.getInstance().getReference().child("games").child(code).child("chat");
         listView.setAdapter(msgAdapter);
         listentochat();
 
@@ -72,12 +70,11 @@ public class Chat extends Fragment {
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                // Toast.makeText(getApplicationContext(), snapshot.getValue().toString(),Toast.LENGTH_LONG).show();
                 Message message = snapshot.getValue(Message.class);
+
                 messages.add(message);
                 msgAdapter.notifyDataSetChanged();
-               // messages.add(snapshot.getValue().toString());
-               // arrayAdapter.notifyDataSetChanged();
+
             }
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
