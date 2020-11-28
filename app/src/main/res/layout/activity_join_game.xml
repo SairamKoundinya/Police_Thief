@@ -4,30 +4,106 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:background="@drawable/redblue"
+    android:paddingTop="10dp"
     android:layout_height="match_parent"
     tools:context=".JoinGame">
 
-
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textColor="@color/white"
-        android:hint="@string/enter_code_here"
-        android:textColorHint="@color/white"
-        android:id="@+id/code"
-        android:inputType="number" />
+        android:layout_margin="5dp"
+        android:id="@+id/checkcodelv"
+        android:background="@drawable/glassview"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textAllCaps="true"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_margin="5dp"
+                android:text="@string/enter_code" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textColor="@color/white"
+                android:id="@+id/code"
+                android:inputType="number" />
+
+        </LinearLayout>
     <Button
         android:id="@+id/check_code"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/custombutton"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/cbtnrb"
         android:textStyle="bold"
         android:text="@string/check_code"
         android:textColor="@color/white"
         android:textSize="16sp"
         />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_margin="5dp"
+        android:id="@+id/gamecodelv"
+        android:background="@drawable/glassview"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:padding="5dp"
+                android:textAllCaps="true"
+                android:id="@+id/gamecode"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_margin="5dp"
+               />
+
+        <Button
+            android:id="@+id/quit_game"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/cbtnrb"
+            android:textStyle="bold"
+            android:text="@string/quit_game"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/host"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            />
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"

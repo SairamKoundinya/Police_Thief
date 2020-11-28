@@ -36,7 +36,7 @@ public class Winner extends AppCompatActivity {
     TextView wpoints;
 
     private String[] players;
-    private String sound, playerNam, code;
+    private String sound, playerNam, code, winner;
     private int[] scores;
     private int playersCount, points;
 
@@ -68,9 +68,12 @@ public class Winner extends AppCompatActivity {
         scores = new int[playersCount];
 
         setPlayerName();
-       // setCode();
+        setCode();
         showPoints();
-        addPoints();
+        if(winner.equals(playerNam))
+        {
+            addPoints();
+        }
     }
 
     private void setCode() {
@@ -86,7 +89,7 @@ public class Winner extends AppCompatActivity {
         editor.putInt("playerPoints", points);
         editor.apply();
 
-        myRef.child("lboard").addValueEventListener(new ValueEventListener() {
+        myRef.child("lboard").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Iterable<DataSnapshot> players = snapshot.getChildren();
@@ -94,6 +97,7 @@ public class Winner extends AppCompatActivity {
                 int count = 0;
                 int min = Integer.MAX_VALUE;
                 String removename = "";
+                leaders.clear();
                 for (DataSnapshot player : players) {
 
                     String name = player.getKey();
@@ -164,7 +168,8 @@ public class Winner extends AppCompatActivity {
 
     private void presentWinner() {
 
-        wname.setText(players[0]);
+        winner = players[0];
+        wname.setText(winner);
         wpoints.setText(String.valueOf(scores[0]));
     }
 

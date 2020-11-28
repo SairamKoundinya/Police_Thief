@@ -55,4 +55,9 @@
     <string name="soundon">soundon</string>
     <string name="leader">Leader</string>
     <string name="your_points">Your Points</string>
+    <string name="players_score">Players Score</string>
+    <string name="back">back</string>
+    <string name="group_chat">Group Chat</string>
+    <string name="enter_code"><![CDATA[Enter Code ->]]></string>
+    <string name="quit_game">Quit game</string>
 </resources>

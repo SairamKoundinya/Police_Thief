@@ -5,18 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/redblue"
+    android:paddingTop="10dp"
     android:orientation="vertical"
     tools:context=".StartGame">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/glassview"
+        android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
+        android:padding="5dp"
         android:id="@+id/code"
         android:textColor="@color/white"
+        android:textAllCaps="true"
         android:textStyle="bold"
         android:gravity="center"
-        android:textSize="40sp" />
+        android:textSize="25sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,8 +36,8 @@
             android:id="@+id/copy_code"
             android:layout_width="0dp"
             android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custombutton2"
+            android:layout_height="40dp"
+            android:background="@drawable/cbtnbr"
             android:text="@string/copy"
             android:textColor="@color/white"
             android:drawableEnd="@drawable/copy"
@@ -38,10 +48,10 @@
             android:id="@+id/share_code"
             android:layout_width="0dp"
             android:layout_weight="0.5"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:text="@string/share"
             android:textColor="@color/white"
-            android:background="@drawable/custombutton2"
+            android:background="@drawable/cbtnbr"
             android:drawableEnd="@drawable/share"
             android:layout_margin="5dp"
             />
@@ -100,13 +110,13 @@
         android:id="@+id/play_game"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@drawable/custombutton"
+        android:background="@drawable/cbtnrb"
         android:text="@string/play_game"
         android:textStyle="bold"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:layout_margin="5dp"
-        />
+        /></LinearLayout>
 
     <TextView
         android:layout_width="match_parent"

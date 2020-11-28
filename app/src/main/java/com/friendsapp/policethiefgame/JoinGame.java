@@ -11,6 +11,7 @@ import butterknife.OnClick;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -20,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -37,14 +40,20 @@ public class JoinGame extends AppCompatActivity {
 
     @BindView(R.id.code)
     EditText codeet;
-
     @BindView(R.id.check_code)
     Button codebtn;
-
     @BindView(R.id.list_players)
     RecyclerView recyclerView;
+    @BindView(R.id.checkcodelv)
+    LinearLayout checkcodelv;
+    @BindView(R.id.gamecodelv)
+    LinearLayout gamecodelv;
+    @BindView(R.id.gamecode)
+    TextView gamecode;
+    @BindView(R.id.host)
+    TextView host;
 
-    private DatabaseReference myRef;
+    private DatabaseReference myRef, myref2;
     private String code, playerName, sound;
     private int playersCount;
     private boolean has;
@@ -131,18 +140,38 @@ public class JoinGame extends AppCompatActivity {
                     showDialog("Can't join, maximum 10 players allowed");
                 }
                 else{
-                   // toast("Players low only");
                     Player player = new Player(playerName);
-                    myRef.child(code).child("players").push().setValue(player);
+                    myref2 = myRef.child(code).child("players").push();
+                    myref2.setValue(player);
+                    joined(code);
                     displayPlayers();
                     storePlayers();
-                    codebtn.setEnabled(false);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 toast(error.getMessage());
+            }
+        });
+    }
+
+    private void joined(String code) {
+
+        checkcodelv.setVisibility(View.GONE);
+        gamecodelv.setVisibility(View.VISIBLE);
+        gamecode.setText("game code: "+code);
+
+        myRef.child(code).child("host").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String name = snapshot.getValue().toString();
+                host.setText("You joined, "+name+" will start the game.");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
@@ -196,6 +225,11 @@ public class JoinGame extends AppCompatActivity {
         adapter.startListening();
     }
 
+    @OnClick(R.id.quit_game)
+    public void quitgame(){
+        showLeaveDialog();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -234,7 +268,7 @@ public class JoinGame extends AppCompatActivity {
                     editor.putInt("playersCount", playersCount);
                     editor.apply();
 
-                    startActivity( new Intent(context, MainActivity.class));
+                    startActivity( new Intent(context, PlayActivity.class));
                     finish();
                 }
             }
@@ -271,6 +305,33 @@ public class JoinGame extends AppCompatActivity {
 
     private void setPlayerName() {
         playerName = sharedPreferences.getString("playerName", "User");
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if(myref2 != null) {
+            showLeaveDialog();
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
+
+    private void showLeaveDialog() {
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.app_name)
+                .setMessage("Are you sure, you want to leave game")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        myref2.removeValue();
+                        JoinGame.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton("NO",null)
+                .show();
     }
 
     private void showDialog(String msg) {

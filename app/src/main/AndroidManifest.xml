@@ -9,13 +9,13 @@
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LeaderBoard"></activity>
+        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".ScoreActivity" />
+        <activity android:name=".PlayActivity" />
+        <activity android:name=".LeaderBoard" />
         <activity android:name=".Winner" />
         <activity android:name=".JoinGame" />
         <activity android:name=".StartGame" />
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/AppTheme" />
         <activity
             android:name=".FirstActivity"
             android:label="@string/app_name"

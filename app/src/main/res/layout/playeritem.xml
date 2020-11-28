@@ -5,8 +5,8 @@
         android:id="@+id/list_name"
         android:layout_width="match_parent"
         android:textStyle="bold"
-        android:padding="5dp"
-        android:background="@drawable/border"
+        android:padding="10dp"
         android:textSize="18sp"
+        android:gravity="center"
         android:textColor="@color/white"
         android:layout_height="wrap_content" />

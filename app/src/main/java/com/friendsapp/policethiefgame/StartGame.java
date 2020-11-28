@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -119,7 +120,7 @@ public class StartGame extends AppCompatActivity {
 
     private void fixRounds() {
 
-        rounds = sharedPreferences.getInt("rounds", 2);
+        rounds = sharedPreferences.getInt("rounds", 5);
         roundstv.setText(String.valueOf(rounds));
     }
 
@@ -135,7 +136,7 @@ public class StartGame extends AppCompatActivity {
     @OnClick(R.id.incrementbtn)
     public void icrmnt()
     {
-        if((rounds+1) <6){
+        if((rounds+1) <26){
             rounds++;
             roundstv.setText(String.valueOf(rounds));
         }
@@ -179,8 +180,9 @@ public class StartGame extends AppCompatActivity {
         Player player = new Player(playerName);
         myRef.child(code).child("players").push().setValue(player);
         myRef.child(code).child("code").setValue(code);
+        myRef.child(code).child("host").setValue(playerName);
 
-        codetv.setText(code);
+        codetv.setText("game code: "+code);
         displayPlayers();
     }
 
@@ -238,8 +240,23 @@ public class StartGame extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        myRef.child(code).removeValue();
+        showLeaveDialog();
+    }
+
+    private void showLeaveDialog() {
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.app_name)
+                .setMessage("Are you sure, you want to stop game")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        myRef.child(code).removeValue();
+                        StartGame.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton("NO",null)
+                .show();
     }
 
     @Override
@@ -260,7 +277,7 @@ public class StartGame extends AppCompatActivity {
     public void playgame()
     {
         int playersCount = players.size();
-        if(playersCount < 3 || playersCount>10)
+        if((playersCount < 3 )|| (playersCount>10))
         {
             showMinPlayersDialog();
             return;
@@ -279,7 +296,7 @@ public class StartGame extends AppCompatActivity {
         editor.putInt("playersCount", playersCount);
         editor.apply();
 
-        startActivity( new Intent(this, MainActivity.class));
+        startActivity( new Intent(this, PlayActivity.class));
         finish();
     }
 
