@@ -8,40 +8,32 @@
     android:layout_height="match_parent"
     tools:context=".FirstActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_margin="10dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/glassview"
-        android:orientation="horizontal">
-
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="0.9"
+            android:layout_width="match_parent"
             android:id="@+id/playerName"
+            android:background="@drawable/glassview"
             android:drawableEnd="@drawable/edit"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:padding="10dp"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:layout_height="wrap_content"/>
-
-        <ImageView
-            android:layout_width="0dp"
-            android:id="@+id/sound"
-            android:layout_weight="0.1"
-            android:layout_margin="5dp"
-            android:src="@drawable/soundon"
-            android:contentDescription="@string/soundon"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:layout_margin="10dp"
         android:orientation="vertical">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:id="@+id/progressBar"
+            android:visibility="invisible"
+            android:layout_margin="5dp"
+            android:layout_height="wrap_content"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,8 +43,8 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="50dp"
-            android:layout_margin="10dp"
             android:text="@string/startgame"
+            android:layout_marginEnd="5dp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:background="@drawable/cbtnrb"
@@ -66,7 +58,7 @@
             android:layout_weight="1"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
+            android:layout_marginStart="5dp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:background="@drawable/cbtnrb"
@@ -75,12 +67,24 @@
             />
         </LinearLayout>
         <Button
+            android:id="@+id/computerplay"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/cbtnrb"
+            android:text="@string/play_with_computer"
+            android:textSize="16sp"
+            />
+        <Button
             android:id="@+id/leaderboard"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
             android:textStyle="bold"
+            android:layout_marginTop="10dp"
             android:textColor="@android:color/white"
             android:background="@drawable/cbtnrb"
             android:text="@string/leaders_board"

@@ -16,7 +16,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -24,87 +26,49 @@ public class FirstActivity extends AppCompatActivity {
 
     @BindView(R.id.playerName)
     TextView playerName;
-    @BindView(R.id.sound)
-    ImageView soundImg;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
-    private String playerNameStr, sound;
+    private String playerNameStr;
+    private boolean came;
 
     private SharedPreferences sharedPreferences;
-    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
-        ButterKnife.bind(this);
 
-        sharedPreferences = getSharedPreferences("com.friendsapp.policethief.sp", Context.MODE_PRIVATE);
-        playerNameStr = sharedPreferences.getString("playerName", "");
+        try {
 
-        displayPlayerName();
-        sounds();
+            if(!isTaskRoot() && getIntent().hasCategory(Intent.CATEGORY_LAUNCHER) && getIntent().getAction()!=null && getIntent().getAction().equals(Intent.ACTION_MAIN)){
+                finish();
+                return;
+            }
+
+
+            ButterKnife.bind(this);
+
+            came = true;
+            sharedPreferences = getSharedPreferences("com.friendsapp.policethief.sp", Context.MODE_PRIVATE);
+            playerNameStr = sharedPreferences.getString("playerName", "");
+
+            displayPlayerName();
+        }
+        catch (Exception e)
+        {
+            toast(e.getMessage());
+        }
     }
 
-    private void sounds(){
-
-        sound = sharedPreferences.getString("sound", "on");
-        if(sound.equals("on")) {
-            mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic1);
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
-            soundImg.setImageDrawable(getResources().getDrawable(R.drawable.soundon));
-        }
-        else{
-            soundImg.setImageDrawable(getResources().getDrawable(R.drawable.soundoff));
-            mprelease();
-        }
-    }
-
-    @OnClick(R.id.sound)
-    public void soundTrigger()
+    private void prgsV()
     {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        if(sound.equals("on"))
-        {
-            editor.putString("sound", "off");
-        }
-        else{
-            editor.putString("sound", "on");
-        }
-        editor.apply();
-        sounds();
+        progressBar.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(mediaPlayer!=null)
-        {
-            mediaPlayer.start();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(mediaPlayer!=null)
-        {
-            mediaPlayer.pause();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mprelease();
-    }
-
-    private void mprelease()
+    private void prgsIV()
     {
-        if(mediaPlayer!=null)
-        {
-            mediaPlayer.release();
-        }
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     private void displayPlayerName() {
@@ -116,8 +80,13 @@ public class FirstActivity extends AppCompatActivity {
     @OnClick(R.id.start_game)
     public void startGame()
     {
+        goStart();
+    }
+
+    private void goStart()
+    {
         if(playerNameStr.equals(""))
-            addName();
+            addName(1);
         else
             startActivity(new Intent(this, StartGame.class));
     }
@@ -125,10 +94,37 @@ public class FirstActivity extends AppCompatActivity {
     @OnClick(R.id.join_game)
     public void joinGame()
     {
+        goJoin();
+    }
+
+    private void goJoin()
+    {
         if(playerNameStr.equals(""))
-            addName();
+            addName(2);
         else
             startActivity(new Intent(this, JoinGame.class));
+    }
+
+    private void goCPlay()
+    {
+        prgsV();
+        if(playerNameStr.equals("")) {
+            prgsIV();
+            addName(3);
+        }
+        else {
+            if(came) {
+                came = false;
+                startActivity(new Intent(this, ComputerPlay.class));
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        came = true;
+        prgsIV();
     }
 
     @OnClick(R.id.leaderboard)
@@ -137,44 +133,75 @@ public class FirstActivity extends AppCompatActivity {
         startActivity(new Intent(this, LeaderBoard.class));
     }
 
+    @OnClick(R.id.computerplay)
+    public void cplay()
+    {
+        goCPlay();
+    }
+
     @OnClick(R.id.playerName)
     public void edit()
     {
-        addName();
+        addName(0);
     }
 
-    private void addName() {
+    private void addName(int i) {
 
-        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_name, null);
+        try {
 
-        final EditText editText = (EditText) dialogView.findViewById(R.id.edt_comment);
-        Button button1 = (Button) dialogView.findViewById(R.id.buttonSubmit);
-        Button button2 = (Button) dialogView.findViewById(R.id.buttonCancel);
+            final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
+            View dialogView = getLayoutInflater().inflate(R.layout.dialog_name, null);
 
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialogBuilder.dismiss();
+            final EditText editText = (EditText) dialogView.findViewById(R.id.edt_comment);
+            Button button1 = (Button) dialogView.findViewById(R.id.buttonSubmit);
+            Button button2 = (Button) dialogView.findViewById(R.id.buttonCancel);
 
-                playerNameStr = editText.getText().toString();
-                displayPlayerName();
+            button1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialogBuilder.dismiss();
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("playerName", playerNameStr);
-                editor.apply();
-            }
-        });
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialogBuilder.dismiss();
-            }
-        });
+                    playerNameStr = editText.getText().toString();
 
-        dialogBuilder.setView(dialogView);
-        dialogBuilder.show();
+                    if (!playerNameStr.isEmpty()) {
+                        displayPlayerName();
 
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("playerName", playerNameStr);
+                        editor.apply();
+
+                        if (i == 1)
+                            goStart();
+                        else if (i == 2)
+                            goJoin();
+                        else if(i == 3)
+                            goCPlay();
+                    } else {
+                        toast("UserName couldn't be empty");
+                    }
+                }
+            });
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialogBuilder.dismiss();
+                }
+            });
+
+            dialogBuilder.setView(dialogView);
+            dialogBuilder.show();
+
+        }
+        catch (Exception e)
+        {
+            toast(e.getMessage());
+        }
+
+    }
+
+    private void toast(String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
 }

@@ -36,6 +36,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class JoinGame extends AppCompatActivity {
 
     @BindView(R.id.code)
@@ -54,78 +57,54 @@ public class JoinGame extends AppCompatActivity {
     TextView host;
 
     private DatabaseReference myRef, myref2;
-    private String code, playerName, sound;
+    private String code, playerName;
     private int playersCount;
-    private boolean has;
+    private boolean has, added;
 
     private RecyclerView.LayoutManager mLayoutManager;
     private FirebaseRecyclerAdapter adapter;
     private SharedPreferences sharedPreferences;
-    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_game);
-        ButterKnife.bind(this);
 
-        mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        sharedPreferences = getSharedPreferences("com.friendsapp.policethief.sp", Context.MODE_PRIVATE);
-        sound = sharedPreferences.getString("sound", "on");
+        try {
+            ButterKnife.bind(this);
 
-        sounds();
+            mLayoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(mLayoutManager);
+            sharedPreferences = getSharedPreferences("com.friendsapp.policethief.sp", Context.MODE_PRIVATE);
 
-        playersCount = 0;
+            playersCount = 0;
+            added = false;
 
-        myRef = FirebaseDatabase.getInstance().getReference().child("games");
-        setPlayerName();
-    }
-
-
-    private void sounds(){
-        if(sound.equals("on")) {
-            mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic2);
-            mediaPlayer.setLooping(true);
+            myRef = FirebaseDatabase.getInstance().getReference().child("games");
+            setPlayerName();
         }
-    }
-
-    protected void onResume() {
-        super.onResume();
-        if(mediaPlayer!=null)
+        catch (Exception e)
         {
-            mediaPlayer.start();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(mediaPlayer!=null)
-        {
-            mediaPlayer.pause();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(mediaPlayer!=null)
-        {
-            mediaPlayer.release();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     @OnClick(R.id.check_code)
     public void checkCode(View view) {
 
-        code = codeet.getText().toString();
+        try {
 
-        if(code.isEmpty()){
-            toast("Code is empty, enter correct code");
-            return;
+            code = codeet.getText().toString();
+            if (code.isEmpty()) {
+                toast("Code is empty, enter correct code");
+                return;
+            }
+            checkCodeInDb(code);
         }
-        checkCodeInDb(code);
+        catch (Exception e)
+        {
+            toast(e.getMessage());
+        }
     }
 
     private void checkPlayersCount() {
@@ -140,12 +119,16 @@ public class JoinGame extends AppCompatActivity {
                     showDialog("Can't join, maximum 10 players allowed");
                 }
                 else{
-                    Player player = new Player(playerName);
-                    myref2 = myRef.child(code).child("players").push();
-                    myref2.setValue(player);
-                    joined(code);
-                    displayPlayers();
-                    storePlayers();
+
+                    if(!added) {
+                        added = true;
+                        Player player = new Player(playerName);
+                        myref2 = myRef.child(code).child("players").push();
+                        myref2.setValue(player);
+                        joined(code);
+                        displayPlayers();
+                        storePlayers();
+                    }
                 }
             }
 
@@ -255,21 +238,32 @@ public class JoinGame extends AppCompatActivity {
 
                 Iterable<DataSnapshot> players = snapshot.getChildren();
                 boolean has = false;
+                boolean there = false;
                 for(DataSnapshot player : players)
                 {
                     String temp = "player"+player.getKey();
-                    editor.putString(temp, player.getValue().toString());
+                    String name =  player.getValue().toString();
+                    editor.putString(temp, name);
                     editor.putInt(temp+"score", 0);
                     playersCount++;
                     has = true;
+                    if(playerName.equals(name))
+                    {
+                        there = true;
+                    }
                 }
-                if(has) {
+                if(has && there) {
                     editor.putString("code", code);
                     editor.putInt("playersCount", playersCount);
                     editor.apply();
 
                     startActivity( new Intent(context, PlayActivity.class));
                     finish();
+                }
+                if(has) {
+                    if (!there) {
+                        startedgame();
+                    }
                 }
             }
 
@@ -279,6 +273,12 @@ public class JoinGame extends AppCompatActivity {
             }
         });
 
+    }
+
+    @OnClick(R.id.back)
+    public void back()
+    {
+        goback();
     }
 
     private void checkCodeInDb(String code) {
@@ -292,7 +292,7 @@ public class JoinGame extends AppCompatActivity {
                     checkNameInDb();
                 }
                 else{
-                    showDialog("No code exists, enter correct code");
+                    showDialog("No code exists, enter correct code or code has been expired");
                 }
             }
 
@@ -310,6 +310,11 @@ public class JoinGame extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+       goback();
+    }
+
+    private void goback()
+    {
         if(myref2 != null) {
             showLeaveDialog();
         }
@@ -332,6 +337,12 @@ public class JoinGame extends AppCompatActivity {
                 })
                 .setNegativeButton("NO",null)
                 .show();
+    }
+
+    private void startedgame() {
+        toast("Game was already started!");
+        myref2.removeValue();
+        JoinGame.super.onBackPressed();
     }
 
     private void showDialog(String msg) {

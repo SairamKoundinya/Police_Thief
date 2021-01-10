@@ -15,7 +15,11 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,48 +36,61 @@ public class Winner extends AppCompatActivity {
     TableLayout tableLayout;
     @BindView(R.id.wname)
     TextView wname;
-    @BindView(R.id.wpoints)
-    TextView wpoints;
 
     private String[] players;
-    private String sound, playerNam, code, winner;
+    private String playerNam, code, winner;
     private int[] scores;
     private int playersCount, points;
 
     private SharedPreferences sharedPref;
     private DatabaseReference myRef;
-    private MediaPlayer mediaPlayer;
     private Map<String, Integer> leaders;
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_winner);
 
-        ButterKnife.bind(this);
+        try {
+            ButterKnife.bind(this);
 
-        sharedPref = getSharedPreferences("com.friendsapp.policethief.sp", Context.MODE_PRIVATE);
-        myRef = FirebaseDatabase.getInstance().getReference().child("games");
-        sound = sharedPref.getString("sound", "on");
+            sharedPref = getSharedPreferences("com.friendsapp.policethief.sp", Context.MODE_PRIVATE);
+            myRef = FirebaseDatabase.getInstance().getReference().child("games");
 
-        if(sound.equals("on")) {
-            mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic1);
-            mediaPlayer.start();
+            playersCount = getCountOfPlayers();
+            leaders = new HashMap<>();
+
+            players = new String[playersCount];
+            scores = new int[playersCount];
+
+            setPlayerName();
+            setCode();
+            showPoints();
+            if (winner.equals(playerNam)) {
+                addPoints();
+            }
+            ads();
         }
-
-        playersCount = getCountOfPlayers();
-        leaders = new HashMap<>();
-
-        players = new String[playersCount];
-        scores = new int[playersCount];
-
-        setPlayerName();
-        setCode();
-        showPoints();
-        if(winner.equals(playerNam))
+        catch (Exception e)
         {
-            addPoints();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void ads() {
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-2971265666261803/6856594374");
+
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                mInterstitialAd.show();
+            }
+        });
     }
 
     private void setCode() {
@@ -136,24 +153,6 @@ public class Winner extends AppCompatActivity {
         playerNam = sharedPref.getString("playerName", "User");
     }
 
-
-    protected void onResume() {
-        super.onResume();
-        if(mediaPlayer!=null)
-        {
-            mediaPlayer.start();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(mediaPlayer!=null)
-        {
-            mediaPlayer.pause();
-        }
-    }
-
     private void showPoints() {
 
         tableLayout.removeAllViews();
@@ -169,15 +168,13 @@ public class Winner extends AppCompatActivity {
     private void presentWinner() {
 
         winner = players[0];
-        wname.setText(winner);
-        wpoints.setText(String.valueOf(scores[0]));
+        wname.setText("Winner - " +winner);
     }
 
     @OnClick(R.id.cgame)
     public void continueGame()
     {
-        startActivity(new Intent(this, FirstActivity.class));
-        finish();
+        super.onBackPressed();
     }
 
     private void setUpTableData() {

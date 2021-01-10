@@ -1,6 +1,7 @@
 package com.friendsapp.policethiefgame;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +29,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.friendsapp.policethiefgame.Models.Player;
 import com.friendsapp.policethiefgame.Models.ViewHolderPlayer;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,10 +37,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
 
 public class StartGame extends AppCompatActivity {
 
@@ -52,7 +58,7 @@ public class StartGame extends AppCompatActivity {
     @BindView(R.id.roundsvalue)
     TextView roundstv;
 
-    private String code, playerName, sound;
+    private String code, playerName;
     private boolean has;
     private int rounds;
     private Map<String,String> players;
@@ -61,63 +67,32 @@ public class StartGame extends AppCompatActivity {
     private FirebaseRecyclerAdapter adapter;
 
     private SharedPreferences sharedPreferences;
-    private MediaPlayer mediaPlayer;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_game);
-        ButterKnife.bind(this);
 
-        mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
+        try {
+            ButterKnife.bind(this);
 
-        sharedPreferences = getSharedPreferences("com.friendsapp.policethief.sp", Context.MODE_PRIVATE);
-        sound = sharedPreferences.getString("sound", "on");
+            mLayoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(mLayoutManager);
 
-        players = new HashMap<>();
+            sharedPreferences = getSharedPreferences("com.friendsapp.policethief.sp", Context.MODE_PRIVATE);
 
-        myRef = FirebaseDatabase.getInstance().getReference().child("games");
+            players = new HashMap<>();
 
-        setPlayerName();
-        generateRandomCode();
-        fixRounds();
-        sounds();
-    }
+            myRef = FirebaseDatabase.getInstance().getReference().child("games");
 
-    private void sounds(){
-        if(sound.equals("on")) {
-            mediaPlayer = MediaPlayer.create(this, R.raw.gamemusic2);
-            mediaPlayer.setLooping(true);
+            setPlayerName();
+            generateRandomCode();
+            fixRounds();
         }
-    }
-
-    protected void onResume() {
-        super.onResume();
-        if(mediaPlayer!=null)
+        catch (Exception e)
         {
-            mediaPlayer.start();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(mediaPlayer!=null)
-        {
-            mediaPlayer.pause();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(mediaPlayer!=null)
-        {
-            mediaPlayer.release();
-        }
-    }
-
     private void fixRounds() {
 
         rounds = sharedPreferences.getInt("rounds", 5);
@@ -157,7 +132,7 @@ public class StartGame extends AppCompatActivity {
     {
         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
 
-        String shareBody = "Join my game using code: "+code+", download app here https://play.google.com/store/apps/details?id=com.friendsapp.policethiefgame";
+        String shareBody = "Join my game using code: \""+code+"\". \nDownload [Police Thief Online Multiplayer Game] here -> https://play.google.com/store/apps/details?id=com.friendsapp.policethiefgame \nOpen game and go to Join Game and enter Game code and play with your friends :)";
         intent.setType("text/plain");
         intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Police Thief Game");
         intent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
@@ -171,19 +146,21 @@ public class StartGame extends AppCompatActivity {
 
     private void generateRandomCode() {
 
-        code = getRandomCode();
-
-        while(checkCode(code)){
+        if(code == null) {
             code = getRandomCode();
+
+            while (checkCode(code)) {
+                code = getRandomCode();
+            }
+
+            Player player = new Player(playerName);
+            myRef.child(code).child("players").push().setValue(player);
+            myRef.child(code).child("code").setValue(code);
+            myRef.child(code).child("host").setValue(playerName);
+
+            codetv.setText("game code: " + code);
+            displayPlayers();
         }
-
-        Player player = new Player(playerName);
-        myRef.child(code).child("players").push().setValue(player);
-        myRef.child(code).child("code").setValue(code);
-        myRef.child(code).child("host").setValue(playerName);
-
-        codetv.setText("game code: "+code);
-        displayPlayers();
     }
 
     private String getRandomCode()
@@ -228,8 +205,12 @@ public class StartGame extends AppCompatActivity {
             }
             @Override
             protected void onBindViewHolder(ViewHolderPlayer holder, final int position, Player player) {
-                holder.setPlayerName(player.getName());
-                players.put(String.valueOf(position+1), player.getName());
+                String nme = player.getName();
+                holder.setPlayerName(nme);
+                if(position == 0)
+                    players.clear();
+
+                players.put(String.valueOf(position+1), nme);
             }
 
         };
@@ -259,6 +240,13 @@ public class StartGame extends AppCompatActivity {
                 .show();
     }
 
+
+    @OnClick(R.id.back)
+    public void back()
+    {
+        showLeaveDialog();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -276,28 +264,32 @@ public class StartGame extends AppCompatActivity {
     @OnClick(R.id.play_game)
     public void playgame()
     {
-        int playersCount = players.size();
-        if((playersCount < 3 )|| (playersCount>10))
-        {
-            showMinPlayersDialog();
-            return;
+        try {
+            int playersCount = players.size();
+            if ((playersCount < 3) || (playersCount > 10)) {
+                showMinPlayersDialog();
+                return;
+            }
+
+            myRef.child(code).child("spin").setValue(players);
+            myRef.child(code).child("rounds").setValue(rounds);
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            for (int i = 0; i < playersCount; i++) {
+                editor.putInt("player" + (i + 1) + "score", 0);
+                editor.putString("player" + (i + 1), players.get(String.valueOf(i + 1)));
+            }
+            editor.putString("code", code);
+            editor.putInt("playersCount", playersCount);
+            editor.apply();
+
+            startActivity(new Intent(this, PlayActivity.class));
+            finish();
         }
-
-        myRef.child(code).child("spin").setValue(players);
-        myRef.child(code).child("rounds").setValue(rounds);
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        for(int i=0;i<playersCount;i++)
+        catch (Exception e)
         {
-            editor.putInt("player"+(i+1)+"score", 0);
-            editor.putString("player"+(i+1), players.get(String.valueOf(i+1)));
+            toast(e.getMessage());
         }
-        editor.putString("code", code);
-        editor.putInt("playersCount", playersCount);
-        editor.apply();
-
-        startActivity( new Intent(this, PlayActivity.class));
-        finish();
     }
 
     private void showMinPlayersDialog() {
