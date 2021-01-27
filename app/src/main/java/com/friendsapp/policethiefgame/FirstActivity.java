@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -16,11 +17,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.friendsapp.policethiefgame.Models.Propic;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
 import java.util.Objects;
+import java.util.Random;
 
 public class FirstActivity extends AppCompatActivity {
 
@@ -29,9 +35,15 @@ public class FirstActivity extends AppCompatActivity {
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
+    @BindView(R.id.bottom_sheet)
+    LinearLayout layoutBottomSheet;
+    @BindView(R.id.propic)
+    CircleImageView proimg;
+
     private String playerNameStr;
     private boolean came;
 
+    private BottomSheetBehavior sheetBehavior;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -54,11 +66,51 @@ public class FirstActivity extends AppCompatActivity {
             playerNameStr = sharedPreferences.getString("playerName", "");
 
             displayPlayerName();
+            bottomsheet();
+            randompropic();
         }
         catch (Exception e)
         {
             toast(e.getMessage());
         }
+    }
+
+    private void randompropic() {
+
+        int picno = sharedPreferences.getInt("PropicNum", -1);
+
+        if(picno == -1) {
+            picno = new Random().nextInt(8);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("PropicNum", picno);
+            editor.apply();
+        }
+
+        proimg.setImageDrawable(getResources().getDrawable(Propic.propics[picno]));
+    }
+
+    private void bottomsheet() {
+
+        sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+
+    @OnClick(R.id.info)
+    public void info()
+    {
+        startActivity(new Intent(this, Attribution.class));
+    }
+
+    @OnClick(R.id.propic)
+    public void propic()
+    {
+        sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+
+    @OnClick(R.id.close)
+    public void closeStickers()
+    {
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
     private void prgsV()
@@ -202,6 +254,98 @@ public class FirstActivity extends AppCompatActivity {
     private void toast(String msg)
     {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.imageView1)
+    public void propic1()
+    {
+        changepropic(R.drawable.propic1,0);
+    }
+    @OnClick(R.id.imageView2)
+    public void propic2()
+    {
+        changepropic(R.drawable.propic2,1);
+    }
+    @OnClick(R.id.imageView3)
+    public void propic3()
+    {
+        changepropic(R.drawable.propic3,2);
+    }
+    @OnClick(R.id.imageView4)
+    public void propic4()
+    {
+        changepropic(R.drawable.propic4,3);
+    }
+    @OnClick(R.id.imageView5)
+    public void propic5()
+    {
+        changepropic(R.drawable.propic5,4);
+    }
+    @OnClick(R.id.imageView6)
+    public void propic6()
+    {
+        changepropic(R.drawable.propic6,5);
+    }
+    @OnClick(R.id.imageView7)
+    public void propic7()
+    {
+        changepropic(R.drawable.propic7,6);
+    }
+    @OnClick(R.id.imageView8)
+    public void propic8()
+    {
+        changepropic(R.drawable.propic8,7);
+    }
+
+    @OnClick(R.id.imageView9)
+    public void propic9()
+    {
+        changepropic(R.drawable.propic9,8);
+    }
+    @OnClick(R.id.imageView10)
+    public void propic10()
+    {
+        changepropic(R.drawable.propic10,9);
+    }
+    @OnClick(R.id.imageView11)
+    public void propic11()
+    {
+        changepropic(R.drawable.propic11,10);
+    }
+    @OnClick(R.id.imageView12)
+    public void propic12()
+    {
+        changepropic(R.drawable.propics12,11);
+    }
+    @OnClick(R.id.imageView13)
+    public void propic13()
+    {
+        changepropic(R.drawable.propic13,12);
+    }
+    @OnClick(R.id.imageView14)
+    public void propic14()
+    {
+        changepropic(R.drawable.propic14,13);
+    }
+    @OnClick(R.id.imageView15)
+    public void propic15()
+    {
+        changepropic(R.drawable.propic15,14);
+    }
+    @OnClick(R.id.imageView16)
+    public void propic16()
+    {
+        changepropic(R.drawable.propic16,15);
+    }
+
+    private void changepropic(int propic, int picnum) {
+
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        proimg.setImageDrawable(getResources().getDrawable(propic));
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("PropicNum", picnum);
+        editor.apply();
     }
 
 }

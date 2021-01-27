@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.friendsapp.policethiefgame.Models.Player;
+import com.friendsapp.policethiefgame.Models.Propic;
 import com.friendsapp.policethiefgame.Models.ViewHolderPlayer;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -60,7 +61,7 @@ public class StartGame extends AppCompatActivity {
 
     private String code, playerName;
     private boolean has;
-    private int rounds;
+    private int rounds, propicid;
     private Map<String,String> players;
 
     private RecyclerView.LayoutManager mLayoutManager;
@@ -85,6 +86,7 @@ public class StartGame extends AppCompatActivity {
             myRef = FirebaseDatabase.getInstance().getReference().child("games");
 
             setPlayerName();
+            setpropic();
             generateRandomCode();
             fixRounds();
         }
@@ -144,6 +146,10 @@ public class StartGame extends AppCompatActivity {
         playerName = sharedPreferences.getString("playerName", "User");
     }
 
+    private void setpropic() {
+        propicid = sharedPreferences.getInt("PropicNum", 0);
+    }
+
     private void generateRandomCode() {
 
         if(code == null) {
@@ -153,7 +159,7 @@ public class StartGame extends AppCompatActivity {
                 code = getRandomCode();
             }
 
-            Player player = new Player(playerName);
+            Player player = new Player(playerName, propicid);
             myRef.child(code).child("players").push().setValue(player);
             myRef.child(code).child("code").setValue(code);
             myRef.child(code).child("host").setValue(playerName);
@@ -201,16 +207,20 @@ public class StartGame extends AppCompatActivity {
                 View view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.playeritem, parent, false);
 
-                return new ViewHolderPlayer(view);
+                return new ViewHolderPlayer(view, getApplicationContext());
             }
             @Override
             protected void onBindViewHolder(ViewHolderPlayer holder, final int position, Player player) {
                 String nme = player.getName();
                 holder.setPlayerName(nme);
+
+                int picid = player.getPropicid();
+                holder.setPropic(Propic.propics[picid]);
+
                 if(position == 0)
                     players.clear();
 
-                players.put(String.valueOf(position+1), nme);
+                players.put(String.valueOf(position+1), nme+":"+picid);
             }
 
         };
@@ -277,7 +287,15 @@ public class StartGame extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             for (int i = 0; i < playersCount; i++) {
                 editor.putInt("player" + (i + 1) + "score", 0);
-                editor.putString("player" + (i + 1), players.get(String.valueOf(i + 1)));
+                String tmpname = players.get(String.valueOf(i + 1));
+                if (tmpname != null) {
+                    int index = tmpname.lastIndexOf(':');
+                    String nme = tmpname.substring(0,index);
+                    int picid = Integer.parseInt( tmpname.substring(index+1));
+
+                    editor.putString("player" + (i + 1), nme);
+                    editor.putInt("player" + (i + 1)+"picid", picid);
+                }
             }
             editor.putString("code", code);
             editor.putInt("playersCount", playersCount);

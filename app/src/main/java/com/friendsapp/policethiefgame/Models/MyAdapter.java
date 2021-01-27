@@ -14,6 +14,7 @@ import com.friendsapp.policethiefgame.R;
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyAdapter extends  RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private List<Result> mDataset;
@@ -21,8 +22,8 @@ public class MyAdapter extends  RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public class MyViewHolder extends RecyclerView.ViewHolder  {
 
-        public TextView point, name;
-        public ImageView img;
+        public TextView point, name, score;
+        public CircleImageView img;
 
         public MyViewHolder(View v) {
             super(v);
@@ -30,6 +31,7 @@ public class MyAdapter extends  RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             point = v.findViewById(R.id.point);
             name = v.findViewById(R.id.result);
             img = v.findViewById(R.id.img);
+            score = v.findViewById(R.id.score);
         }
 
     }
@@ -54,6 +56,7 @@ public class MyAdapter extends  RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.point.setText(mDataset.get(position).getScore());
         holder.name.setText(mDataset.get(position).getName());
         holder.img.setImageDrawable(apc.getResources().getDrawable(mDataset.get(position).getImgid()));
+        holder.score.setText("Score: "+mDataset.get(position).getScr());
     }
 
     @Override

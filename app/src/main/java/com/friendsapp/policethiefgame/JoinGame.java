@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.friendsapp.policethiefgame.Models.Player;
+import com.friendsapp.policethiefgame.Models.Propic;
 import com.friendsapp.policethiefgame.Models.ViewHolderPlayer;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,7 +59,7 @@ public class JoinGame extends AppCompatActivity {
 
     private DatabaseReference myRef, myref2;
     private String code, playerName;
-    private int playersCount;
+    private int playersCount, propicid;
     private boolean has, added;
 
     private RecyclerView.LayoutManager mLayoutManager;
@@ -82,6 +83,7 @@ public class JoinGame extends AppCompatActivity {
 
             myRef = FirebaseDatabase.getInstance().getReference().child("games");
             setPlayerName();
+            setpropic();
         }
         catch (Exception e)
         {
@@ -122,7 +124,7 @@ public class JoinGame extends AppCompatActivity {
 
                     if(!added) {
                         added = true;
-                        Player player = new Player(playerName);
+                        Player player = new Player(playerName, propicid);
                         myref2 = myRef.child(code).child("players").push();
                         myref2.setValue(player);
                         joined(code);
@@ -195,11 +197,12 @@ public class JoinGame extends AppCompatActivity {
                 View view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.playeritem, parent, false);
 
-                return new ViewHolderPlayer(view);
+                return new ViewHolderPlayer(view, getApplicationContext());
             }
             @Override
             protected void onBindViewHolder(ViewHolderPlayer holder, final int position, Player player) {
                 holder.setPlayerName(player.getName());
+                holder.setPropic(Propic.propics[player.getPropicid()]);
             }
 
         };
@@ -242,12 +245,18 @@ public class JoinGame extends AppCompatActivity {
                 for(DataSnapshot player : players)
                 {
                     String temp = "player"+player.getKey();
-                    String name =  player.getValue().toString();
-                    editor.putString(temp, name);
+
+                    String tmpname = player.getValue().toString();
+                    int index = tmpname.lastIndexOf(':');
+                    String nme = tmpname.substring(0,index);
+                    int picid = Integer.parseInt( tmpname.substring(index+1));
+
+                    editor.putString(temp, nme);
+                    editor.putInt(temp+"picid", picid);
                     editor.putInt(temp+"score", 0);
                     playersCount++;
                     has = true;
-                    if(playerName.equals(name))
+                    if(playerName.equals(nme))
                     {
                         there = true;
                     }
@@ -305,6 +314,10 @@ public class JoinGame extends AppCompatActivity {
 
     private void setPlayerName() {
         playerName = sharedPreferences.getString("playerName", "User");
+    }
+
+    private void setpropic() {
+        propicid = sharedPreferences.getInt("PropicNum", -1);
     }
 
     @Override

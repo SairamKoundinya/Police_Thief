@@ -21,14 +21,14 @@
         android:text="@string/police_thief"
         android:textStyle="bold"
         android:drawableStart="@drawable/back"
-        android:textColor="@color/white"
+        android:textColor="@color/bg"
         android:textSize="16sp"
         />
 
         <TextView
             android:layout_width="match_parent"
             android:id="@+id/wname"
-            android:background="@drawable/glassview"
+            android:background="@drawable/glassviewblue"
             android:gravity="center"
             android:drawableStart="@drawable/grade"
             android:drawableEnd="@drawable/happy"
@@ -36,7 +36,7 @@
             android:padding="5dp"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="@color/yelow"
+            android:textColor="@color/dblue"
             android:layout_height="40dp" />
 
 
@@ -45,21 +45,22 @@
         android:orientation="horizontal"
         android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
-        android:background="@drawable/cbtnbr"
         android:layout_height="40dp">
 
         <TextView
             android:layout_width="0dp"
             android:text="@string/player"
+            android:background="@color/blue"
             android:gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/bg"
             android:layout_weight="0.7"
             android:layout_height="match_parent" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.3"
-            android:textColor="@color/white"
+            android:textColor="@color/bg"
+            android:background="@color/red"
             android:gravity="center"
             android:text="@string/score"
             android:layout_height="match_parent" />

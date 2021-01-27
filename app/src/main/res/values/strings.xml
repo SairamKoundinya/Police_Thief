@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Police Thief</string>
+    <string name="app_name">Chor Police</string>
     <string name="play">Play</string>
     <string name="chat">Chat</string>
     <string name="player">Player</string>
@@ -21,8 +21,8 @@
     <string name="enter_code_here">Enter code here..</string>
     <string name="check_code">Check Code</string>
     <string name="format">%04d</string>
-    <string name="distribute_chits">Distribute Chits</string>
-    <string name="UrTurn">Now your turn to distribute chits</string>
+    <string name="distribute_chits">Distribute</string>
+    <string name="UrTurn">Your turn</string>
     <string name="FrTurn"> turn to distribute chits</string>
     <string name="YouD">You distributed</string>
     <string name="FindThief">You\'re the police, find the thief by selecting the name in the list below</string>
@@ -66,4 +66,56 @@
     <string name="distribute">Distribute</string>
     <string name="go_home">Go home</string>
     <string name="police_thief">Police Thief</string>
+    <string name="click_sticker_to_send">Tease/Bluff Stickers</string>
+    <string name="happy">happy</string>
+    <string name="you">You</string>
+    <string name="profilepicture">ProfilePicture</string>
+    <string name="username_profile_picture">Set Profile Picture</string>
+    <string name="points_1000_0">Points: 1000/0</string>
+    <string name="next_turn_starts_in">Next turn starts in..</string>
+    <string name="your_chit">Your Chit</string>
+    <string name="points_0_1000">Points: 0/1000</string>
+    <string name="police">Police</string>
+    <string name="thief">Thief</string>
+
+
+    <string name="attribute1">Designed by Freepik</string>
+    <string name="attribute2">Designed by macrovector / Freepik</string>
+    <string name="attribute3">Designed by slidesgo / Freepik</string>
+    <string name="attribute4">Designed by pikisuperstar / Freepik</string>
+    <string name="attribute5">Designed by catalyststuff / Freepik</string>
+    <string name="attribute6">Designed by rawpixel.com / Freepik</string>
+    <string name="attribute7">Designed by sentavio / Freepik</string>
+    <string name="attribute8">Designed by brgfx / Freepik</string>
+    <string name="attribute9">Designed by mamewmy / Freepik</string>
+    <string name="attribute10">Designed by Milano83 / Freepik</string>
+    <string name="attribute11">Designed by vecteezy</string>
+    <string name="attribute12">Designed by Lootiefiles</string>
+    <string name="attribute13">Designed by Даниил Зимовец /Lootiefiles</string>
+    <string name="attribute14">Designed by Bamdad /Lootiefiles</string>
+    <string name="attribute15">Designed by Si Ma /Lootiefiles</string>
+    <string name="attribute16">Designed by Margarita Ivanchikova /Lootiefiles</string>
+    <string name="attribute17">Designed by Alexander Rozhkov /Lootiefiles</string>
+    <string name="attribute18">Designed by Hassan Sadeghi /Lootiefiles</string>
+    <string name="attribute19">Designed by Crazy Leaker /Lootiefiles</string>
+    <string name="attribute20">Designed by Liam ODonnell /Lootiefiles</string>
+    <string name="attribute21">Designed by XiaoxinChen /Lootiefiles</string>
+    <string name="attribute22">Designed by Rick Lukin /Lootiefiles</string>
+    <string name="attribute23">Designed by Duong Nguyen /Lootiefiles</string>
+    <string name="attribute24">Maniacal Witches Laugh - Designed by Mike Koenig /SoundBible</string>
+    <string name="attribute25">Realistic Punch - Designed by Mark DiAngelo /SoundBible</string>
+    <string name="attribute26">https://soundbible.com/</string>
+    <string name="attribute27">https://lottiefiles.com/</string>
+    <string name="attribute28">https://www.vecteezy.com/</string>
+    <string name="attribute29">http://www.freepik.com</string>
+    <string name="attribution">attribution</string>
+    <string name="info">info</string>
+    <string name="atrribution">Atrribution</string>
 </resources>
+
+
+
+
+
+
+

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.friendsapp.policethiefgame.Models.Propic;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -39,8 +41,8 @@ public class Winner extends AppCompatActivity {
 
     private String[] players;
     private String playerNam, code, winner;
-    private int[] scores;
-    private int playersCount, points;
+    private int[] scores, picids;
+    private int playersCount, pointss;
 
     private SharedPreferences sharedPref;
     private DatabaseReference myRef;
@@ -63,13 +65,11 @@ public class Winner extends AppCompatActivity {
 
             players = new String[playersCount];
             scores = new int[playersCount];
+            picids = new int[playersCount];
 
             setPlayerName();
             setCode();
             showPoints();
-            if (winner.equals(playerNam)) {
-                addPoints();
-            }
             ads();
         }
         catch (Exception e)
@@ -100,10 +100,10 @@ public class Winner extends AppCompatActivity {
 
     private void addPoints() {
 
-        points += sharedPref.getInt("playerPoints", 0);
+        pointss += sharedPref.getInt("playerPoints", 0);
 
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt("playerPoints", points);
+        editor.putInt("playerPoints", pointss);
         editor.apply();
 
         myRef.child("lboard").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -115,6 +115,7 @@ public class Winner extends AppCompatActivity {
                 int min = Integer.MAX_VALUE;
                 String removename = "";
                 leaders.clear();
+                boolean has = false;
                 for (DataSnapshot player : players) {
 
                     String name = player.getKey();
@@ -126,16 +127,18 @@ public class Winner extends AppCompatActivity {
                     }
                     count++;
                     leaders.put(name, point);
+                    if(name.equals(playerNam))
+                        has = true;
                 }
-                if(count<10)
+                if(has || count<10)
                 {
-                    leaders.put(playerNam, points);
+                    leaders.put(playerNam, pointss);
                     myRef.child("lboard").setValue(leaders);
                 }
                 else{
-                    if(points>min) {
+                    if(pointss>min) {
                         leaders.remove(removename);
-                        leaders.put(playerNam, points);
+                        leaders.put(playerNam, pointss);
                         myRef.child("lboard").setValue(leaders);
                     }
                 }
@@ -161,6 +164,10 @@ public class Winner extends AppCompatActivity {
         for(int i=0;i<playersCount;i++)
         {
             tableLayout.addView(getTableRow(i));
+            if (players[i].equals(playerNam)) {
+                pointss = scores[i]/((i+1)*100);
+                addPoints();
+            }
         }
         presentWinner();
     }
@@ -184,11 +191,11 @@ public class Winner extends AppCompatActivity {
             String playerName = sharedPref.getString("player"+(i+1), "Player"+(i+1));
             players[i] = playerName;
 
+            int picid =  sharedPref.getInt("player" + (i + 1)+"picid", 0);
+            picids[i]= picid;
+
             int score = sharedPref.getInt("player"+(i+1)+"score", 0);
             scores[i] = score;
-
-            if(playerName.equals(playerNam))
-                points = score/100;
         }
 
         sortTableData();
@@ -210,6 +217,10 @@ public class Winner extends AppCompatActivity {
                     String name = players[i];
                     players[i] = players[j];
                     players[j] = name;
+
+                    int ids = picids[i];
+                    picids[i] = picids[j];
+                    picids[j] = ids;
                 }
             }
         }
@@ -219,10 +230,13 @@ public class Winner extends AppCompatActivity {
 
         TableRow tableRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerowwhite, null);
 
-        TextView tv = (TextView) tableRow.getChildAt(0);
+        CircleImageView img = (CircleImageView) tableRow.getChildAt(0);
+        img.setImageDrawable(getResources().getDrawable(Propic.propics[picids[i]]));
+
+        TextView tv = (TextView) tableRow.getChildAt(1);
         tv.setText(players[i]);
 
-        tv = (TextView) tableRow.getChildAt(1);
+        tv = (TextView) tableRow.getChildAt(2);
         tv.setText(String.valueOf(scores[i]));
 
         return tableRow;

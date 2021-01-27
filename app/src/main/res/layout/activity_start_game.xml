@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.9"
-            android:textColor="@color/white"
+            android:textColor="@color/bg"
             android:gravity="center"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -64,7 +64,7 @@
             android:layout_height="40dp"
             android:background="@drawable/cbtnbr"
             android:text="@string/copy"
-            android:textColor="@color/white"
+            android:textColor="@color/bg"
             android:drawableEnd="@drawable/copy"
             android:layout_margin="5dp"
             />
@@ -75,7 +75,7 @@
             android:layout_weight="0.5"
             android:layout_height="40dp"
             android:text="@string/share"
-            android:textColor="@color/white"
+            android:textColor="@color/bg"
             android:background="@drawable/cbtnbr"
             android:drawableEnd="@drawable/share"
             android:layout_margin="5dp"
@@ -105,7 +105,7 @@
                 android:text="@string/minus"
                 android:textSize="20sp"
                 android:background="@drawable/rounded_button"
-                android:textColor="@color/red"
+                android:textColor="@color/white"
                 android:id="@+id/decrementbtn" />
 
             <TextView
@@ -122,7 +122,7 @@
                 android:background="@drawable/rounded_button"
                 android:textStyle="bold"
                 android:textSize="20sp"
-                android:textColor="@color/red"
+                android:textColor="@color/white"
                 android:layout_width="0dp"
                 android:layout_margin="2dp"
                 android:layout_weight="0.1"
@@ -138,7 +138,7 @@
         android:background="@drawable/cbtnrb"
         android:text="@string/play_game"
         android:textStyle="bold"
-        android:textColor="@color/white"
+        android:textColor="@color/bg"
         android:textSize="16sp"
         android:layout_margin="5dp"
         /></LinearLayout>
@@ -149,7 +149,7 @@
         android:paddingEnd="10dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:textColor="@color/white"
+        android:textColor="@android:color/black"
         android:textStyle="italic"
         android:text="@string/players_joined" />
 
